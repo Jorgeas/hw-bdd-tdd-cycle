@@ -86,8 +86,16 @@ When /^(?:|I )select "([^"]*)" from "([^"]*)"$/ do |value, field|
   select(value, :from => field)
 end
 
+When /^(?:|I )check rating ([^"]*)$/ do |ratingcode|
+  step "I check \"ratings_#{ratingcode}\""
+end
+
 When /^(?:|I )check "([^"]*)"$/ do |field|
   check(field)
+end
+
+When /^(?:|I )uncheck rating ([^"]*)$/ do |ratingcode|
+  step "I uncheck \"ratings_#{ratingcode}\""
 end
 
 When /^(?:|I )uncheck "([^"]*)"$/ do |field|
@@ -227,13 +235,9 @@ Then /^the "([^"]*)" checkbox(?: within (.*))? should not be checked$/ do |label
   end
 end
  
-Then /^(?:|I )should be on (.+)$/ do |page_name|
+Then /^(?:|I )should be on the (.+) page$/ do |page_name|
   current_path = URI.parse(current_url).path
-  if current_path.respond_to? :should
-    current_path.should == path_to(page_name)
-  else
-    assert_equal path_to(page_name), current_path
-  end
+  expect(current_path).to eq(path_to(page_name))
 end
 
 Then /^(?:|I )should have the following query string:$/ do |expected_pairs|
@@ -252,3 +256,4 @@ end
 Then /^show me the page$/ do
   save_and_open_page
 end
+
